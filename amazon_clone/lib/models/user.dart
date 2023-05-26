@@ -53,7 +53,7 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id'] as String,
+      id: map['_id'] as String, //Map _id ở MongoDB sang Dart
       email: map['email'] as String,
       password: map['password'] as String,
       name: map['name'] as String,
