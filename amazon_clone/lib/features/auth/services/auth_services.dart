@@ -27,7 +27,7 @@ class AuthService {
           address: '',
           type: '',
           token: '');
-      http.Response res = await http.post(Uri.parse('$uri/signup'),
+      http.Response res = await http.post(Uri.parse('$uri/api/signup'),
           body: user.toJson(),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
@@ -52,7 +52,7 @@ class AuthService {
     required String password,
   }) async {
     try {
-      http.Response res = await http.post(Uri.parse('$uri/login'),
+      http.Response res = await http.post(Uri.parse('$uri/api/login'),
           body: jsonEncode({'email': email, 'password': password}),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
@@ -72,6 +72,39 @@ class AuthService {
           );
         },
       );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  void getUserData({
+    required BuildContext context,
+  }) async {
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      String? token = preferences.getString('x-auth-token');
+      if (token == null) {
+        preferences.setString('x-auth-token', '');
+      }
+      var tokenRes = await http.post(
+        Uri.parse('$uri/token-valid'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!
+        },
+      );
+      var response = jsonDecode(tokenRes.body);
+      if (response == true) {
+        http.Response userRes = await http.get(
+          Uri.parse('$uri/me'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': token
+          },
+        );
+        var userProvider = Provider.of<UserProvider>(context, listen: false)
+            .setUser(userRes.body);
+      }
     } catch (e) {
       showSnackBar(context, e.toString());
     }

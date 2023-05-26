@@ -2,6 +2,7 @@ import express from "express";
 import User from "../models/user.js";
 import bcryptjs from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
+import { auth } from "../middlewares/auth.js";
 
 const authRoute = express.Router();
 
@@ -46,6 +47,32 @@ authRoute.post("/api/login", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+authRoute.post("/token-valid", async (req, res) => {
+  try {
+    const token = req.header("x-auth-token");
+    if (!token) {
+      return res.status(401).json(false);
+    }
+    const verified = jsonwebtoken.verify(token, "passwordKey");
+    //Token generate từ _id => Có thể findById
+    if (!verified) {
+      return res.status(401).json(false);
+    }
+    const user = await User.findById(verified.id);
+    if (!user) {
+      return res.status(401).json(false);
+    }
+    return res.status(200).json(true);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+authRoute.get("/me", auth, async (req, res) => {
+  const user = User.findById(req.user);
+  return res.json({ ...user._doc, token: req.token });
 });
 
 export default authRoute;
