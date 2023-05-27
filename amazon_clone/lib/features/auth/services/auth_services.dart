@@ -77,9 +77,7 @@ class AuthService {
     }
   }
 
-  void getUserData({
-    required BuildContext context,
-  }) async {
+  void getUserData(BuildContext context) async {
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String? token = preferences.getString('x-auth-token');
@@ -87,7 +85,7 @@ class AuthService {
         preferences.setString('x-auth-token', '');
       }
       var tokenRes = await http.post(
-        Uri.parse('$uri/token-valid'),
+        Uri.parse('$uri/tokenIsValid'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token!
@@ -96,7 +94,7 @@ class AuthService {
       var response = jsonDecode(tokenRes.body);
       if (response == true) {
         http.Response userRes = await http.get(
-          Uri.parse('$uri/me'),
+          Uri.parse('$uri/'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'x-auth-token': token

@@ -49,7 +49,7 @@ authRoute.post("/api/login", async (req, res) => {
   }
 });
 
-authRoute.post("/token-valid", async (req, res) => {
+authRoute.post("/tokenIsValid", async (req, res) => {
   try {
     const token = req.header("x-auth-token");
     if (!token) {
@@ -70,7 +70,7 @@ authRoute.post("/token-valid", async (req, res) => {
   }
 });
 
-authRoute.get("/me", auth, async (req, res) => {
+authRoute.get("/", auth, async (req, res) => {
   const user = User.findById(req.user);
   return res.json({ ...user._doc, token: req.token });
 });
