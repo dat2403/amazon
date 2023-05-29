@@ -40,8 +40,8 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               Container(
                 padding: const EdgeInsets.only(left: 15, right: 15),
-                child: const Row(
-                  children: [
+                child: Row(
+                  children: const [
                     Padding(
                       padding: EdgeInsets.only(right: 15),
                       child: Icon(Icons.notifications_outlined),
@@ -54,8 +54,8 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ),
       ),
-      body: const Column(
-        children: [
+      body: Column(
+        children: const [
           BelowAppBar(),
           SizedBox(
             height: 10,

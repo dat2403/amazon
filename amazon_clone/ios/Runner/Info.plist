@@ -47,5 +47,14 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+   		<string>fetch</string>
+   		<string>remote-notification</string>
+	</array>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>We need access your audio library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need image for product</string>
 </dict>
 </plist>
