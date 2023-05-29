@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import authRoute from "./routes/authRoute.js";
+import adminRoute from "./routes/adminRoute.js";
+import productRoute from "./routes/productRoute.js";
 
 const USERNAME = "roberthoang";
 const PASSWORD = "xXYIW6P8dtj3gC8b";
@@ -15,6 +17,8 @@ const app = express();
 app.use(express.json());
 
 app.use(authRoute);
+app.use(adminRoute);
+app.use(productRoute);
 
 mongoose
   .connect(DB_URL)
