@@ -1,9 +1,10 @@
 import 'dart:io';
-
 import 'package:amazon_clone/common/widgets/custom_button.dart';
 import 'package:amazon_clone/common/widgets/custom_textfield.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/constants/utils.dart';
+import 'package:amazon_clone/features/admin/services/admin_services.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
 
+  final _addProductFormKey = GlobalKey<FormState>();
+
+  final AdminServices adminServices = AdminServices();
+
   List<String> productCategories = [
     'Mobiles',
     'Essentials',
@@ -32,6 +37,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
   String category = 'Mobiles';
 
   List<File> images = [];
+
+  void sellProduct() {
+    if (_addProductFormKey.currentState!.validate() && images.isNotEmpty) {
+      adminServices.sellProduct(
+        context: context,
+        name: _productNameController.text,
+        description: _descriptionController.text,
+        price: double.parse(_priceController.text),
+        quantity: double.parse(_quantityController.text),
+        category: category,
+        images: images,
+      );
+    }
+  }
 
   void selectImages() async {
     var res = await pickImages();
@@ -75,6 +94,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ),
       body: SingleChildScrollView(
         child: Form(
+          key: _addProductFormKey,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 10,
@@ -84,41 +104,57 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                GestureDetector(
-                  onTap: selectImages,
-                  child: DottedBorder(
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(10),
-                    dashPattern: const [10, 4],
-                    strokeCap: StrokeCap.round,
-                    child: Container(
-                      width: double.infinity,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.folder_open,
-                            size: 40,
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            "Select Product Images",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey.shade400,
+                images.isNotEmpty
+                    ? CarouselSlider(
+                        items: images.map((image) {
+                          return Builder(
+                            builder: (BuildContext context) => Image.file(
+                              image,
+                              fit: BoxFit.cover,
+                              height: 200,
                             ),
-                          )
-                        ],
+                          );
+                        }).toList(),
+                        options: CarouselOptions(
+                          viewportFraction: 1,
+                          height: 200,
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: selectImages,
+                        child: DottedBorder(
+                          borderType: BorderType.RRect,
+                          radius: const Radius.circular(10),
+                          dashPattern: const [10, 4],
+                          strokeCap: StrokeCap.round,
+                          child: Container(
+                            width: double.infinity,
+                            height: 150,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.folder_open,
+                                  size: 40,
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Text(
+                                  "Select Product Images",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 const SizedBox(
                   height: 30,
                 ),
@@ -172,7 +208,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                CustomButton(title: "Sell", onTap: () {})
+                CustomButton(
+                  title: "Sell",
+                  onTap: sellProduct,
+                )
               ],
             ),
           ),
