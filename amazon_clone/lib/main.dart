@@ -3,7 +3,6 @@ import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:amazon_clone/router.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'features/splash/splash.dart';
 
 void main() {
