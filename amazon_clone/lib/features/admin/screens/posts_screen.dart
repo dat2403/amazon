@@ -14,7 +14,7 @@ class PostsScreen extends StatefulWidget {
 
 class _PostsScreenState extends State<PostsScreen> {
   final AdminServices adminServices = AdminServices();
-  late List<Product>? products;
+  late List<Product> products = [];
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _PostsScreenState extends State<PostsScreen> {
       context: context,
       product: product,
       onSuccess: () {
-        products?.removeAt(index);
+        products.removeAt(index);
         setState(() {});
       },
     );
@@ -46,16 +46,16 @@ class _PostsScreenState extends State<PostsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return products == null
+    return products.isEmpty
         ? const Loader()
         : Scaffold(
             body: GridView.builder(
-              itemCount: products!.length,
+              itemCount: products.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
               itemBuilder: (context, index) {
-                final productData = products![index];
+                final productData = products[index];
                 return Column(
                   children: [
                     SizedBox(

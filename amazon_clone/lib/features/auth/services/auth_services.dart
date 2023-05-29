@@ -4,6 +4,7 @@ import 'package:amazon_clone/common/widgets/bottom_bar.dart';
 import 'package:amazon_clone/constants/error_handling.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/constants/utils.dart';
+import 'package:amazon_clone/features/admin/screens/admin_screen.dart';
 import 'package:amazon_clone/models/user.dart';
 import 'package:amazon_clone/network/api_client.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
@@ -67,11 +68,19 @@ class AuthService {
               .setUser(User.fromJson(res.body));
           await preferences.setString(
               'x-auth-token', jsonDecode(res.body)['token']);
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            BottomBar.routeName,
-            (route) => false,
-          );
+          if (User
+              .fromJson(res.body)
+              .type == "admin") {
+            Navigator.pushReplacementNamed(
+                context,
+                AdminScreen.routeName
+            );
+          } else {
+            Navigator.pushReplacementNamed(
+                context,
+                BottomBar.routeName
+            );
+          }
         },
       );
     } catch (e) {

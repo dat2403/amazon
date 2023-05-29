@@ -20,17 +20,15 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
-
-
-
       // call api -> check user -> nav
       authService.getUserData().then((user) {
         if (user != null) {
           // save user in UserProvider...
           var userProvider = Provider.of<UserProvider>(context, listen: false);
           userProvider.setUser(user);
+          print(user);
 
-          if (user.type.toLowerCase() == "admin") {
+          if (user.type == "admin") {
             Navigator.pushReplacementNamed(context, AdminScreen.routeName);
           } else {
             Navigator.pushReplacementNamed(context, BottomBar.routeName);

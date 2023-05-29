@@ -1,10 +1,15 @@
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/features/admin/screens/posts_screen.dart';
+import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
+import 'package:amazon_clone/network/api_client.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminScreen extends StatefulWidget {
-  static const routeName = "/admin_page";
+  static const String routeName = "/admin";
+
   const AdminScreen({super.key});
 
   @override
@@ -32,6 +37,33 @@ class _AdminScreenState extends State<AdminScreen> {
     });
   }
 
+  callApi() async {
+    try {
+      await ApiClient.client.get(Uri.parse("$uri/api/error"));
+    } catch (e, s) {
+      print(s);
+    }
+  }
+
+  @override
+  void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      ApiClient.client.interceptors.removeWhere((element) {
+        return element is HttpHandlerInterceptor;
+      });
+
+      ApiClient.client.interceptors
+          .add(HttpHandlerInterceptor(onAuthFail: () async {
+        await (await SharedPreferences.getInstance()).clear();
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, AuthScreen.routeName);
+        }
+      }));
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,11 +89,14 @@ class _AdminScreenState extends State<AdminScreen> {
                   color: Colors.black,
                 ),
               ),
-              const Text(
-                "Admin",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+              InkWell(
+                onTap: callApi,
+                child: const Text(
+                  "Admin",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               )
             ],

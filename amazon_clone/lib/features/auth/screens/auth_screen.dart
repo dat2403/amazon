@@ -8,6 +8,7 @@ enum Auth { signin, signup }
 
 class AuthScreen extends StatefulWidget {
   static const String routeName = '/auth-screen';
+
   const AuthScreen({Key? key}) : super(key: key);
 
   @override
@@ -21,8 +22,10 @@ class _AuthScreenState extends State<AuthScreen> {
 
   final AuthService authService = AuthService();
 
-  final TextEditingController _emailController = TextEditingController(text: "hoangtiendat.work@gmail.com");
-  final TextEditingController _passwordController = TextEditingController(text: "123123");
+  final TextEditingController _emailController =
+      TextEditingController(text: "hoangtiendat.thidaihoc@gmail.com");
+  final TextEditingController _passwordController =
+      TextEditingController(text: "123123");
   final TextEditingController _nameController = TextEditingController();
 
   @override

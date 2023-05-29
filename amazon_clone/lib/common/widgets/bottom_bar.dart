@@ -3,8 +3,8 @@ import 'package:amazon_clone/features/account/screens/account_screen.dart';
 import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
 import 'package:amazon_clone/features/home/screens/home_screen.dart';
 import 'package:amazon_clone/network/api_client.dart';
-import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,7 +39,7 @@ class _BottomBarState extends State<BottomBar> {
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      print("ApiClient.client.interceptors: ${ApiClient.client.interceptors.length}");
+      // print("ApiClient.client.interceptors: ${ApiClient.client.interceptors.length}");
 
       ApiClient.client.interceptors.removeWhere((element) {
         return element is HttpHandlerInterceptor;
