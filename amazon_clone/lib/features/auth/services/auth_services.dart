@@ -62,7 +62,8 @@ class AuthService {
         context: context,
         onSuccess: () async {
           SharedPreferences preferences = await SharedPreferences.getInstance();
-          Provider.of<UserProvider>(context, listen: false).setUser(res.body);
+          Provider.of<UserProvider>(context, listen: false)
+              .setUser(User.fromJson(res.body));
           await preferences.setString(
               'x-auth-token', jsonDecode(res.body)['token']);
           Navigator.pushNamedAndRemoveUntil(
@@ -77,7 +78,7 @@ class AuthService {
     }
   }
 
-  void getUserData(BuildContext context) async {
+  Future<User?> getUserData() async {
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String? token = preferences.getString('x-auth-token');
@@ -100,12 +101,11 @@ class AuthService {
             'x-auth-token': token
           },
         );
-        var userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.setUser(userRes.body);
-        print(userProvider.user);
+        return User.fromJson(userRes.body);
       }
     } catch (e) {
-      showSnackBar(context, e.toString());
+      return null;
     }
+    return null;
   }
 }

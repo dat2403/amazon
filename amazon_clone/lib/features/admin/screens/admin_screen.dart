@@ -1,9 +1,10 @@
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/features/admin/screens/posts_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter/material.dart';
 
 class AdminScreen extends StatefulWidget {
+  static const routeName = "/admin_page";
   const AdminScreen({super.key});
 
   @override
