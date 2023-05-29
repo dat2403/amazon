@@ -3,6 +3,7 @@ import 'package:amazon_clone/features/home/widgets/address_box.dart';
 import 'package:amazon_clone/features/home/widgets/carousel_image.dart';
 import 'package:amazon_clone/features/home/widgets/deal_of_day.dart';
 import 'package:amazon_clone/features/home/widgets/top_categories.dart';
+import 'package:amazon_clone/network/api_client.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +15,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  callApi() async {
+    try {
+      await ApiClient.client.get(Uri.parse("$uri/api/error"));
+    } catch (e, s) {
+      print(s);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,10 +90,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.transparent,
                 height: 42,
                 margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: const Icon(
-                  Icons.mic,
-                  color: Colors.black,
-                  size: 25,
+                child: InkWell(
+                  onTap: callApi,
+                  child: const Icon(
+                    Icons.mic,
+                    color: Colors.black,
+                    size: 25,
+                  ),
                 ),
               )
             ],

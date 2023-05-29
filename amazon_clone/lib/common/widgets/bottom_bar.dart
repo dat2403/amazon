@@ -1,11 +1,16 @@
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/features/account/screens/account_screen.dart';
+import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
 import 'package:amazon_clone/features/home/screens/home_screen.dart';
+import 'package:amazon_clone/network/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter/scheduler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomBar extends StatefulWidget {
   static const String routeName = '/actual-home';
+
   const BottomBar({super.key});
 
   @override
@@ -29,6 +34,27 @@ class _BottomBarState extends State<BottomBar> {
     setState(() {
       _page = page;
     });
+  }
+
+  @override
+  void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      print("ApiClient.client.interceptors: ${ApiClient.client.interceptors.length}");
+
+      ApiClient.client.interceptors.removeWhere((element) {
+        return element is HttpHandlerInterceptor;
+      });
+
+      ApiClient.client.interceptors
+          .add(HttpHandlerInterceptor(onAuthFail: () async {
+        await (await SharedPreferences.getInstance()).clear();
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, AuthScreen.routeName);
+        }
+      }));
+    });
+
+    super.initState();
   }
 
   @override

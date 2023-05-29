@@ -5,6 +5,7 @@ import 'package:amazon_clone/constants/error_handling.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/constants/utils.dart';
 import 'package:amazon_clone/models/user.dart';
+import 'package:amazon_clone/network/api_client.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -85,7 +86,7 @@ class AuthService {
       if (token == null) {
         preferences.setString('x-auth-token', '');
       }
-      var tokenRes = await http.post(
+      var tokenRes = await ApiClient.client.post(
         Uri.parse('$uri/tokenIsValid'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -94,7 +95,7 @@ class AuthService {
       );
       var response = jsonDecode(tokenRes.body);
       if (response == true) {
-        http.Response userRes = await http.get(
+        http.Response userRes = await ApiClient.client.get(
           Uri.parse('$uri/'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
