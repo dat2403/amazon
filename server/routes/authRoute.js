@@ -71,7 +71,8 @@ authRoute.post("/tokenIsValid", async (req, res) => {
 });
 
 authRoute.get("/", auth, async (req, res) => {
-  const user = User.findById(req.user);
+  // Phải có await không sẽ lỗi
+  const user = await User.findById(req.user);
   return res.json({ ...user._doc, token: req.token });
 });
 
