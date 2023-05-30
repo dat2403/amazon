@@ -13,6 +13,16 @@ productRoute.get("/api/products", auth, async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 });
+productRoute.get("/api/products/search/:name", auth, async (req, res) => {
+  try {
+    const products = await Product.find({
+      name: new RegExp(req.params.name, "i"),
+    });
+    return res.json(products);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
 
 productRoute.get("/api/error", auth, async (req, res) => {
   return res.status(401).json({ error: error.message });

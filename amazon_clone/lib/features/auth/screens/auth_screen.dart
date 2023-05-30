@@ -23,7 +23,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final AuthService authService = AuthService();
 
   final TextEditingController _emailController =
-      TextEditingController(text: "hoangtiendat.thidaihoc@gmail.com");
+      TextEditingController(text: "hoangtiendat.work@gmail.com");
   final TextEditingController _passwordController =
       TextEditingController(text: "123123");
   final TextEditingController _nameController = TextEditingController();
