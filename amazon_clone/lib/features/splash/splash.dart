@@ -26,7 +26,7 @@ class _SplashPageState extends State<SplashPage> {
           // save user in UserProvider...
           var userProvider = Provider.of<UserProvider>(context, listen: false);
           userProvider.setUser(user);
-          print(user);
+          // print(user);
 
           if (user.type == "admin") {
             Navigator.pushReplacementNamed(context, AdminScreen.routeName);
