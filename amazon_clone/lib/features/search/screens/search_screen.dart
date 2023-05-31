@@ -18,7 +18,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final SearchServices searchServices = SearchServices();
-  late List<Product> productList;
+  List<Product>? productList;
 
   @override
   void initState() {
@@ -129,9 +129,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: productList.length,
+                    itemCount: productList!.length,
                     itemBuilder: (context, index) {
-                      return SearchedProduct(product: productList[index]);
+                      return SearchedProduct(product: productList![index]);
                     },
                   ),
                 )
