@@ -1,0 +1,3 @@
+class ProductDetailsServices {
+  void rateProduct() {}
+}
